@@ -1,0 +1,409 @@
+﻿@model DashboardMainViewModel
+@{
+    int i = 0;
+
+    ViewBag.Title = "داشبورد مدیریتی " + StaticClasses.Setting.SiteSmallNameFarsi;
+    ApplicationDbContext db = new ApplicationDbContext();
+
+
+    List<TransactionModel> trans = db.TblTransactions.OrderByDescending(f => f.TimePay).Take(15).OrderByDescending(f => f.TimePay).ToList();
+
+    
+
+}
+
+<div class="row">
+    <div class="col-md-6 col-sm-6 col-lg-3">
+        <div class="dash-widget dash-widget5">
+            <a href="/dashboard/transaction">
+                <span class="dash-widget-icon bg-success"><i class="fa fa-money" aria-hidden="true"></i></span>
+                <div class="dash-widget-info">
+                    <h3>@db.TblTransactions.Count()</h3>
+                    <span>تراکنش</span>
+                </div>
+            </a>
+        </div>
+    </div>
+    <div class="col-md-6 col-sm-6 col-lg-3">
+        <div class="dash-widget dash-widget5">
+            <a href="/dashboard/users">
+                <span class="dash-widget-icon bg-info"><i class="fa fa-user-o" aria-hidden="true"></i></span>
+                <div class="dash-widget-info">
+                    <h3>@db.Users.Count()</h3>
+                    <span>کاربران</span>
+                </div>
+            </a>
+        </div>
+    </div>
+    <div class="col-md-6 col-sm-6 col-lg-3">
+        <div class="dash-widget dash-widget5">
+            <a href="/dashboard/courses/index">
+                <span class="dash-widget-icon bg-warning"><i class="fa fa-shopping-cart"></i></span>
+                <div class="dash-widget-info">
+                    <h3>@db.TblCourse.Count()</h3>
+                    <span>درس</span>
+                </div>
+            </a>
+        </div>
+    </div>
+    <div class="col-md-6 col-sm-6 col-lg-3">
+        <div class="dash-widget dash-widget5">
+            <a href="/dashboard/weblog">
+                <span class="dash-widget-icon bg-danger"><i class="fa fa-commenting" aria-hidden="true"></i></span>
+                <div class="dash-widget-info">
+                    <h3>@db.TblBlog.Count()</h3>
+                    <span>نوشته</span>
+                </div>
+            </a>
+        </div>
+    </div>
+
+
+
+</div>
+
+
+<div class="row">
+    <div class="col-sm-2 col-xs-4">
+        <div class="dash-widget dash-widget5">
+            <a href="/dashboard/transaction">
+                <span class="dash-widget-icon bg-success small-icon"><i class="fa fa-users" aria-hidden="true"></i></span>
+                <div class="dash-widget-info">
+                    <h3>@OnlineUsers.AllVisitors</h3>
+                    <span>بازدید از ابتدا</span>
+                </div>
+            </a>
+        </div>
+    </div>
+    <div class="col-sm-2 col-xs-4">
+        <div class="dash-widget dash-widget5">
+            <a href="/dashboard/courses/users">
+                <span class="dash-widget-icon bg-info small-icon"><i class="fa fa-users" aria-hidden="true"></i></span>
+                <div class="dash-widget-info">
+                    <h3>@OnlineUsers.MaximumVisitors</h3>
+                    <span>بیشترین آنلاین</span>
+                </div>
+            </a>
+        </div>
+    </div>
+    <div class="col-sm-2 col-xs-4">
+        <div class="dash-widget dash-widget5">
+            <a href="/dashboard/courses/index">
+                <span class="dash-widget-icon bg-warning small-icon"><i class="fa fa-users"></i></span>
+                <div class="dash-widget-info">
+                    <h3>@OnlineUsers.TodayVisitors</h3>
+                    <span>بازدیدهای امروز</span>
+                </div>
+            </a>
+        </div>
+    </div>
+    <div class="col-sm-2 col-xs-4">
+        <div class="dash-widget dash-widget5">
+            <a href="/dashboard/weblog">
+                <span class="dash-widget-icon bg-danger small-icon"><i class="fa fa-users" aria-hidden="true"></i></span>
+                <div class="dash-widget-info">
+                    <h3>@OnlineUsers.UserList.Count</h3>
+                    <span>نفرات آنلاین</span>
+                </div>
+            </a>
+        </div>
+    </div>
+    <div class="col-sm-2 col-xs-4">
+        <div class="dash-widget dash-widget5">
+            <a href="/dashboard/weblog">
+                <span class="dash-widget-icon bg-danger small-icon"><i class="fa fa-users" aria-hidden="true"></i></span>
+                <div class="dash-widget-info">
+                    <h3>@OnlineUsers.UserList.Count(d => !string.IsNullOrEmpty(d.Value.Username))</h3>
+                    <span>کاربران آنلاین</span>
+                </div>
+            </a>
+        </div>
+    </div>
+    <div class="col-sm-2 col-xs-4">
+        <div class="dash-widget dash-widget5">
+            <a href="/dashboard/weblog">
+                <span class="dash-widget-icon bg-danger small-icon"><i class="fa fa-users" aria-hidden="true"></i></span>
+                <div class="dash-widget-info">
+                    <h3>@OnlineUsers.UserList.Count(d => string.IsNullOrEmpty(d.Value.Username))</h3>
+                    <span>مهمان آنلاین</span>
+                </div>
+            </a>
+        </div>
+    </div>
+
+
+</div>
+
+
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel panel-table panel-table-top">
+            <div class="panel-heading">
+                <h3 class="panel-title"><a href="/dashboard/courses/pending" class="text-primary"> درس های تایید نشده </a></h3>
+            </div>
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <table class="table table-striped custom-table m-b-0">
+                        @Html.Partial("_RenderCourse", Model.PendingCourses)
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="row">
+    <div class="col-lg-4 col-md-6 col-xs-12">
+        <div class="panel">
+            <div class="panel-heading text-center">
+                <h3 class="panel-title">ورودی ها</h3>
+            </div>
+            <div class="panel-body">
+                <div id="donutChart" class="rad-chart"></div>
+            </div>
+
+        </div>
+    </div>
+    <div class="col-lg-8 col-md-6 col-xs-12">
+        <div class="panel">
+            <div class="panel-heading text-center">
+                <h3 class="panel-title">آمار تراکنش های 30 روز اخیر</h3>
+            </div>
+            <div class="panel-body">
+                <div id="areaChart" class="rad-chart"></div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<div class="row">
+    <div class="col-sm-8">
+
+        <div class="panel panel-table panel-table-top">
+            <div class="panel-heading">
+                <h3 class="panel-title">کاربران اخیر:</h3>
+            </div>
+            <div class="panel-body">
+
+                <script type="text/javascript">
+                    function country(ip, i) {
+
+                        $.getJSON('https://ipapi.co/' + ip + '/json', function (data) {
+                            $('#c-' + i).text(data.country);
+                            //$('.country')
+                        });
+
+                    }
+                </script>
+                <table class="table table-striped custom-table m-b-0">
+                    <thead>
+                        <tr>
+                            <td>نام کاربری</td>
+                            <td>IP</td>
+                            <td>کشور</td>
+                            <td>سیستم عامل</td>
+                            <td>آخرین مشاهده</td>
+                        </tr>
+                    </thead>
+                    @foreach (KeyValuePair<string, OnlineUsers.OnlineModel> item in OnlineUsers.UserList.OrderByDescending(d => d.Value.LastTime).Take(50))
+                    {
+                        i += 1;
+                        <tr>
+                            <td>@(string.IsNullOrEmpty(item.Value.Username) ? "مهمان" : item.Value.Username)</td>
+                            <td>@item.Key</td>
+                            <td><span id="c-@i"></span></td>
+                            <td>@item.Value.OperatingSystem</td>
+                            <td>
+                                @(item.Value.LastTime.ToShortTimeString())
+                                <script type="text/javascript">country('@item.Key', @i);</script>
+                            </td>
+                        </tr>
+                    }
+                </table>
+
+            </div>
+        </div>
+
+    </div>
+
+    <div class="col-sm-4">
+        <div class="panel">
+            <div class="panel-heading">
+                <h3 class="panel-title">درصد درس های هر موضوع</h3>
+            </div>
+            <div class="panel-body">
+                <div id="donutChart2" class="rad-chart"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel panel-table panel-table-top">
+            <div class="panel-heading">
+                <h3 class="panel-title">آخرین تراکنش ها</h3>
+            </div>
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <table class="table table-striped custom-table m-b-0">
+                        <thead>
+                            <tr>
+                                <th>کد</th>
+                                <th>توضیحات</th>
+                                <th>تاریخ</th>
+                                <th>مبلغ</th>
+                                <th>وضعیت</th>
+                                <th>اطلاعات</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (TransactionModel item in trans)
+                            {
+                                <tr>
+                                    <td>#@item.Id</td>
+                                    <td>
+                                        <div class="product-det">
+                                            <div class="product-desc">
+                                                @if (item.TblBasketbBuy != null)
+                                                {
+                                                    <h2><a>سبد خرید شماره @item.TblBasketbBuy.Id</a> <span>@item.TblBasketbBuy.TblOrders.Count سفارش</span></h2>
+                                                }
+                                                else
+                                                {
+                                                    <h2>حذف شده</h2>
+                                                }
+                                            </div>
+                                        </div>
+                                    </td>
+
+                                    <td>@item.TimePay.ToPersian().ToString("yy/MM/dd HH:mm")</td>
+                                    
+
+                                    <td><p class="price-sup">@item.Amount.ToRial()</p></td>
+                                    <td>
+                                        @switch (item.State)
+                                        {
+                                            case PaymentState_Enum.MakeTransaction:
+                                                <label class="label label-info">تراکنش ایجاد شده</label>
+                                                break;
+                                            case PaymentState_Enum.SendFirstDataToBank:
+                                                <label class="label label-info">ارسال اطلاعات به بانک</label>
+                                                break;
+                                            case PaymentState_Enum.ReadyToPaymentByUser:
+                                                <label class="label label-info">آماده پرداخت توسط کاربر</label>
+                                                break;
+                                            case PaymentState_Enum.BackFailure:
+                                                <label class="label label-danger">بازگشت ناموفق</label>
+                                                break;
+                                            case PaymentState_Enum.BackSuccess:
+                                                <label class="label label-success">پرداخت موفق</label>
+                                                break;
+                                            default:
+                                                <label class="label label-warning">وضعیت نامشخص</label>
+                                                break;
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (!string.IsNullOrWhiteSpace(item.RefId))
+                                        { <span class="label label-info-border">RefId: @item.RefId</span>}
+
+                                        @if (!string.IsNullOrWhiteSpace(item.ResponseCode))
+                                        { <span class="label label-info-border">Response: @item.ResponseCode</span>}
+
+                                        <span class="label label-info-border">IP: @item.UserIP</span>
+                                    </td>
+
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="panel-footer">
+                <a href="/dashboard/transactions" class="text-primary">مشاهده همه صورتحساب ها</a>
+            </div>
+        </div>
+    </div>
+   
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        if ($("#areaChart, #bar-example, #donutChart, #area-chart").length > 0) {
+            var colors = [
+                '#E94B3B',
+                '#39C7AA',
+                '#1C7EBB',
+                '#F98E33',
+                '#ad96da'
+            ];
+
+            Morris.Line({
+                lineColors: colors,
+                element: 'areaChart',
+
+                data: [
+                    @Html.Raw(Model.TransactionsAmar)
+                ],
+                xkey: 'date',
+                ykeys: ['a', 'b', 'c'],
+                resize: true,
+                labels: ['تعداد تراکنش ها', 'تراکنش های موفق', 'جمع مبالغ امروز'],
+                parseTime: false
+            });
+
+            
+
+            Morris.Donut({
+                element: 'donutChart',
+                data: [{
+                    value: 40,
+                    label: 'شخصی'
+                },
+                {
+                    value: 15,
+                    label: 'گوگل'
+                },
+                {
+                    value: 45,
+                    label: 'تلگرام'
+                },
+                {
+                    value: 30,
+                    label: 'تبلیغات'
+                },
+                {
+                    value: 15,
+                    label: 'فیسبوک'
+                },
+                ],
+                labelColor: '#333',
+                resize: true,
+                colors: colors
+            });
+
+
+
+            Morris.Donut({
+                element: 'donutChart2',
+                data: [@Html.Raw(Model.CoursesInCategoryAmar)
+                ],
+                labelColor: '#333',
+                resize: true,
+                colors: colors
+            });
+        }
+    });
+</script>
